@@ -1,12 +1,15 @@
 package com.example.desafio.entities;
 
 import com.example.desafio.enums.Classe;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,11 +25,15 @@ public class Personagem {
 
     private String nome;
     private String nomeAventureiro;
-    private Enum<Classe> classe;
+
+    @Enumerated(EnumType.STRING)
+    private Classe classe;
     private int level;
-    private List<ItemMagico> itensMagicos;
+
+    @OneToMany(mappedBy = "personagem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ItemMagico> itensMagicos = new ArrayList<>();
+
     private int forca;
     private int defesa;
-    
-
 }
