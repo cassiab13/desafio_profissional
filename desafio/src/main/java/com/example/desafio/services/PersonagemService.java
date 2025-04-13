@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonagemService implements ValidaPersonagem {
@@ -64,15 +65,16 @@ public class PersonagemService implements ValidaPersonagem {
         return repository.save(personagemToUpdate);
     }
 
-    public Personagem updateNomeAventureiro(Long id, String nomeAventureiro){
+    public Optional<Personagem> updateNomeAventureiro(Long id, String nomeAventureiro){
         Personagem personagem = validaPersonagem(id);
 
         personagem.setNomeAventureiro(nomeAventureiro);
+        repository.save(personagem);
 
-        return repository.save(personagem);
+        return repository.findById(id);
     }
 
-    public Personagem addItemAoPersonagem(Long idPersonagem, Long idItem){
+    public Optional<Personagem> addItemAoPersonagem(Long idPersonagem, Long idItem){
         Personagem personagem = validaPersonagem(idPersonagem);
         ItemMagico itemMagico = itemMagicoRepository.findById(idItem).orElseThrow(() -> new IllegalArgumentException("Item não encontrado"));
         if (itemMagico.getTipoItem() == TipoItem.AMULETO) {
@@ -83,8 +85,9 @@ public class PersonagemService implements ValidaPersonagem {
             }
         }
         itemMagico.setPersonagem(personagem);
-
-        return repository.save(personagem);
+        personagem.getItensMagicos().add(itemMagico);
+        repository.save(personagem);
+        return repository.findById(idPersonagem);
     }
 
     public void delete(Long id){

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/personagem")
@@ -55,14 +56,14 @@ public class PersonagemController {
     }
 
     @PutMapping("/{id}/nomeAventureiro")
-    public ResponseEntity<Personagem> updateNomeAventureiro(@PathVariable Long id, @RequestBody String nomeAventureiro){
-        Personagem personagemAtualizado = service.updateNomeAventureiro(id, nomeAventureiro);
+    public ResponseEntity<Optional<Personagem>> updateNomeAventureiro(@PathVariable Long id, @RequestBody String nomeAventureiro){
+        Optional<Personagem> personagemAtualizado = service.updateNomeAventureiro(id, nomeAventureiro);
         return ResponseEntity.ok(personagemAtualizado);
     }
 
     @PutMapping("/{idPersonagem}/itens/{idItem}")
-    public ResponseEntity<Personagem> addItemAoPersonagem(@PathVariable Long idPersonagem, @PathVariable Long idItem){
-        Personagem personagem = service.addItemAoPersonagem(idPersonagem, idItem);
+    public ResponseEntity<Optional<Personagem>> addItemAoPersonagem(@PathVariable Long idPersonagem, @PathVariable Long idItem){
+        Optional<Personagem> personagem = service.addItemAoPersonagem(idPersonagem, idItem);
         return ResponseEntity.ok(personagem);
     }
 
